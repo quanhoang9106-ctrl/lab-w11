@@ -1,0 +1,38 @@
+
+/****************
+Mã sinh viên: 202418971
+Họ tên: Hoàng Văn Quân
+****************/
+
+using System;
+
+// Chuyển đổi cảm biến cũ sang giao diện ISensor
+public sealed class SmokeSensorAdapter : ISensor
+{
+    private readonly LegacySmokeDetector legacy;
+
+    public SmokeSensorAdapter(LegacySmokeDetector legacy)
+    {
+        if (legacy == null)
+        {
+            throw new ArgumentNullException(nameof(legacy));
+        }
+
+        this.legacy = legacy;
+    }
+
+    // Chuyển giá trị từ 0-1000 sang 0-100
+    public double ReadValue()
+    {
+        int oldValue = legacy.GetSmokeLevel();
+
+        double newValue = oldValue / 10.0;
+
+        return newValue;
+    }
+
+    public string GetUnit()
+    {
+        return "% smoke";
+    }
+}
