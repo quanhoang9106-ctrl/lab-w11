@@ -4,8 +4,14 @@ Mã sinh viên: 202418971
 Họ tên: Hoàng Văn Quân
 ****************/
 
-// Giao diện điều phối sự kiện khẩn cấp
+// Các sự kiện khẩn cấp
+public enum EmergencyEvent
+{
+    FireDetected
+}
+
+// Giao diện điều phối thiết bị
 public interface IEmergencyMediator
 {
-    void Notify(string eventName);
+    void Notify(EmergencyEvent eventName);
 }

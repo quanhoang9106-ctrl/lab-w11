@@ -19,8 +19,22 @@ public sealed class DoorController
     // Mở khóa cửa thoát hiểm
     public void Unlock()
     {
+        if (!IsLocked)
+        {
+            Console.WriteLine("[DOOR] Cua da duoc mo khoa.");
+            return;
+        }
+
         IsLocked = false;
 
-        Console.WriteLine("[DOOR] Cua da duoc mo khoa.");
+        Console.WriteLine("[DOOR] Da mo khoa cua.");
+    }
+
+    // Khóa cửa
+    public void Lock()
+    {
+        IsLocked = true;
+
+        Console.WriteLine("[DOOR] Da khoa cua.");
     }
 }

@@ -18,15 +18,20 @@ public sealed class EmergencyMediator : IEmergencyMediator
         DoorController door,
         VentilationController ventilation)
     {
-        this.alarm = alarm;
-        this.door = door;
-        this.ventilation = ventilation;
+        this.alarm = alarm ??
+            throw new ArgumentNullException(nameof(alarm));
+
+        this.door = door ??
+            throw new ArgumentNullException(nameof(door));
+
+        this.ventilation = ventilation ??
+            throw new ArgumentNullException(nameof(ventilation));
     }
 
-    // Nhận sự kiện và điều khiển các thiết bị
-    public void Notify(string eventName)
+    // Tiếp nhận và xử lý sự kiện
+    public void Notify(EmergencyEvent eventName)
     {
-        if (eventName == "FIRE_DETECTED")
+        if (eventName == EmergencyEvent.FireDetected)
         {
             Console.WriteLine("[MEDIATOR]");
             Console.WriteLine("Bat dau xu ly su co.");

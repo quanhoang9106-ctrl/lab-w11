@@ -19,8 +19,21 @@ public sealed class Alarm
     // Bật còi báo động
     public void Activate()
     {
+        if (IsActive)
+        {
+            Console.WriteLine("[ALARM] Coi dang hoat dong.");
+            return;
+        }
+
         IsActive = true;
 
         Console.WriteLine("[ALARM] Coi bao dong da bat.");
+    }
+
+    // Tắt còi khi được cho phép reset
+    public void Deactivate()
+    {
+        IsActive = false;
+        Console.WriteLine("[ALARM] Coi bao dong da tat.");
     }
 }

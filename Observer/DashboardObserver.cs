@@ -6,7 +6,7 @@ Họ tên: Hoàng Văn Quân
 
 using System;
 
-// Hiển thị các thông tin cảnh báo
+// Hiển thị thông tin cảnh báo trên màn hình
 public sealed class DashboardObserver : IAlertObserver
 {
     public void Update(AlertEvent alertEvent)
@@ -20,6 +20,9 @@ public sealed class DashboardObserver : IAlertObserver
             + alertEvent.Unit
         );
 
-        Console.WriteLine("Severity: " + alertEvent.Severity);
+        Console.WriteLine(
+            "Severity: "
+            + alertEvent.Severity.ToString().ToUpperInvariant()
+        );
     }
 }

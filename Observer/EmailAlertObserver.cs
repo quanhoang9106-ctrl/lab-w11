@@ -6,14 +6,14 @@ Họ tên: Hoàng Văn Quân
 
 using System;
 
-// Mô phỏng gửi email khi có cảnh báo
+// Mô phỏng gửi email cảnh báo
 public sealed class EmailAlertObserver : IAlertObserver
 {
     public void Update(AlertEvent alertEvent)
     {
         Console.WriteLine("[EMAIL]");
 
-        if (alertEvent.Severity == "CRITICAL")
+        if (alertEvent.Severity == AlertSeverity.Critical)
         {
             Console.WriteLine("Gui email canh bao khan cap.");
         }
@@ -23,6 +23,10 @@ public sealed class EmailAlertObserver : IAlertObserver
         }
 
         Console.WriteLine("Sensor: " + alertEvent.SensorName);
-        Console.WriteLine("Severity: " + alertEvent.Severity);
+
+        Console.WriteLine(
+            "Severity: "
+            + alertEvent.Severity.ToString().ToUpperInvariant()
+        );
     }
 }

@@ -7,13 +7,16 @@ Họ tên: Hoàng Văn Quân
 using System;
 using System.Collections.Generic;
 
-// Lớp giám sát cảm biến và quản lý observer
+// Giám sát cảm biến và quản lý các observer
 public sealed class SensorMonitor
 {
     private readonly List<IAlertObserver> observers
         = new List<IAlertObserver>();
 
-    // Đăng ký đối tượng nhận cảnh báo
+    private const double WarningThreshold = 50;
+    private const double CriticalThreshold = 70;
+
+    // Đăng ký observer
     public void Attach(IAlertObserver observer)
     {
         if (observer == null)
@@ -21,7 +24,7 @@ public sealed class SensorMonitor
             throw new ArgumentNullException(nameof(observer));
         }
 
-        if (observers.Contains(observer) == false)
+        if (!observers.Contains(observer))
         {
             observers.Add(observer);
         }
@@ -31,33 +34,54 @@ public sealed class SensorMonitor
         }
     }
 
-    // Hủy đăng ký nhận cảnh báo
+    // Hủy đăng ký observer
     public void Detach(IAlertObserver observer)
     {
-        if (observers.Contains(observer))
-        {
-            observers.Remove(observer);
-        }
+        observers.Remove(observer);
     }
 
-    // Đọc cảm biến và kiểm tra mức độ nguy hiểm
+    // Kiểm tra dữ liệu từ cảm biến
     public void CheckSensor(string sensorName, ISensor sensor)
     {
+        if (sensor == null)
+        {
+            throw new ArgumentNullException(nameof(sensor));
+        }
+
+        if (string.IsNullOrWhiteSpace(sensorName))
+        {
+            throw new ArgumentException(
+                "Ten cam bien khong hop le."
+            );
+        }
+
         double value = sensor.ReadValue();
+
+        // Kiểm tra giá trị sau chuyển đổi
+        if (double.IsNaN(value) ||
+            double.IsInfinity(value) ||
+            value < 0 || value > 100)
+        {
+            throw new InvalidOperationException(
+                "Gia tri cam bien khong hop le."
+            );
+        }
+
         string unit = sensor.GetUnit();
-        string severity;
 
         Console.WriteLine("Sensor: " + sensorName);
         Console.WriteLine("Value: " + value.ToString("F1") + unit);
 
+        AlertSeverity severity;
+
         // Xác định mức độ cảnh báo
-        if (value >= 70)
+        if (value >= CriticalThreshold)
         {
-            severity = "CRITICAL";
+            severity = AlertSeverity.Critical;
         }
-        else if (value >= 50)
+        else if (value >= WarningThreshold)
         {
-            severity = "WARNING";
+            severity = AlertSeverity.Warning;
         }
         else
         {
@@ -65,6 +89,7 @@ public sealed class SensorMonitor
             return;
         }
 
+        // Tạo đối tượng chứa thông tin cảnh báo
         AlertEvent alertEvent = new AlertEvent(
             sensorName,
             value,
@@ -76,7 +101,7 @@ public sealed class SensorMonitor
         Notify(alertEvent);
     }
 
-    // Gửi cảnh báo tới các observer
+    // Gửi cảnh báo đến từng observer
     private void Notify(AlertEvent alertEvent)
     {
         foreach (IAlertObserver observer in observers.ToArray())
@@ -87,7 +112,9 @@ public sealed class SensorMonitor
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Loi observer: " + ex.Message);
+                Console.WriteLine(
+                    "Loi khi thong bao observer: " + ex.Message
+                );
             }
         }
     }

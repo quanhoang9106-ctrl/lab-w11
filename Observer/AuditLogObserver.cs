@@ -20,7 +20,14 @@ public sealed class AuditLogObserver : IAlertObserver
         );
 
         Console.WriteLine("Sensor: " + alertEvent.SensorName);
-        Console.WriteLine("Value: " + alertEvent.Value);
-        Console.WriteLine("Severity: " + alertEvent.Severity);
+
+        Console.WriteLine(
+            "Value: " + alertEvent.Value.ToString("F1")
+        );
+
+        Console.WriteLine(
+            "Severity: "
+            + alertEvent.Severity.ToString().ToUpperInvariant()
+        );
     }
 }

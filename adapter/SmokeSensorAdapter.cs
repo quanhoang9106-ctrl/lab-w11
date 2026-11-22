@@ -21,10 +21,18 @@ public sealed class SmokeSensorAdapter : ISensor
         this.legacy = legacy;
     }
 
-    // Chuyển giá trị từ 0-1000 sang 0-100
+    // Chuyển thang đo từ 0-1000 sang 0-100%
     public double ReadValue()
     {
         int oldValue = legacy.GetSmokeLevel();
+
+        // Kiểm tra dữ liệu từ cảm biến cũ
+        if (oldValue < 0 || oldValue > 1000)
+        {
+            throw new InvalidOperationException(
+                "Gia tri cam bien cu khong hop le."
+            );
+        }
 
         double newValue = oldValue / 10.0;
 
